@@ -22,17 +22,18 @@ CREATE TABLE players
     playerID    INT NOT NULL AUTO_INCREMENT,
     firstName    VARCHAR(25) NOT NULL,
     lastName    VARCHAR(25),
-    teamID 		VARCHAR(25),
+    teamID 	VARCHAR(25) NULL,
     CONSTRAINT playersPK PRIMARY KEY(playerID)
 );
 
 CREATE TABLE player_contract
 (
-    playerAssignmentID    INT    NOT NULL,
+    playerID    INT    NOT NULL,
     amount    float NOT NULL,
     years    INT NOT NULL,
     yearSigned    INT NOT NULL,
-    CONSTRAINT pcPK PRIMARY KEY(playerAssignmentID, amount, years)
+    CONSTRAINT pcPK PRIMARY KEY(playerID, amount, years),
+    	CONSTRAINT pcFK FOREIGN KEY(playerID) REFERENCES players(playerID)
 );
 CREATE TABLE team_record
 (
