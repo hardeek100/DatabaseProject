@@ -23,7 +23,8 @@ CREATE TABLE players
     firstName    VARCHAR(25) NOT NULL,
     lastName    VARCHAR(25),
     teamID 	VARCHAR(25) NULL,
-    CONSTRAINT playersPK PRIMARY KEY(playerID)
+    CONSTRAINT playersPK PRIMARY KEY(playerID),
+	CONSTRAINT playersFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
 );
 
 CREATE TABLE player_contract
