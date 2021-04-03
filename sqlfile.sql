@@ -22,7 +22,7 @@ CREATE TABLE players
     playerID    INT NOT NULL AUTO_INCREMENT,
     firstName    VARCHAR(25) NOT NULL,
     lastName    VARCHAR(25),
-    teamID 	VARCHAR(25) NULL,
+    teamID 	INT NULL,
     CONSTRAINT playersPK PRIMARY KEY(playerID),
 	CONSTRAINT playersFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
 );
