@@ -1,4 +1,4 @@
-INSERT INTO Players(fName, lName, teamID)
+INSERT INTO Players(firstName, lastName, teamID)
 VALUES
 /* Team For Atlanta Hawks  */
 ('Begdan','Bagdanovic','1'),
