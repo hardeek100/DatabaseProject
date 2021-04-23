@@ -40,11 +40,11 @@ CREATE TABLE player_contract
 CREATE TABLE team_record
 (
     teamID        INT NOT NULL,
-    season        INT NOT NULL,
+    /*season        INT NOT NULL,*/
     wins        INT NULL,
     losses        INT NULL,
-    ties        INT NULL,
-    CONSTRAINT trPK PRIMARY KEY(teamID, season),
+    /*ties        INT NULL,*/
+    CONSTRAINT trPK PRIMARY KEY(teamID), /*, season */
 	CONSTRAINT trFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
 );
 CREATE TABLE player_stats
@@ -301,6 +301,25 @@ INSERT into player_contract(amount, years, yearSigned) VALUES
 (243342134, 3, 2018),
 (442342353, 3, 2021),
 (4434533311, 3, 2019);
+
+
+/*
+Inserting into team_record
+Yathartha 
+
+*/
+
+INSERT into team_record(teamID, wins, losses) VALUES
+(1, 2766, 2853),
+(2, 3426, 2370), 
+(3, 1485, 2065), 
+(4, 1050, 1345), 
+(5, 2227, 2135), 
+(6, 1867, 2168), 
+(7, 1615, 1610), 
+(8, 1749, 1802), 
+(9, 2753, 2927),
+(10, 2787, 2998);
 
 SELECT * from player_contract;
 select * from player_contract INNER JOIN players ON player_contract.playerID = players.playerID NATURAL JOIN teams where city = "Dallas";
