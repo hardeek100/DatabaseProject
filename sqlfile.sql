@@ -327,6 +327,21 @@ VALUES (1, 2021, 14.7, 3.7, 3.2),
 (20, 2021, 13.6, 3.5, 5.5);
 
 
+-- Inserting to team_record table
+INSERT into team_record(teamID, season, wins, losses, ties)
+VALUES 
+(1, 2021, 33, 7, 0),
+(2, 2021, 32, 28, 0),
+(3, 2021, 40, 20, 0),
+(4, 2021, 29, 30, 0),
+(5, 2021, 25, 34, 0),
+(6, 2021, 21, 38, 0),
+(7, 2021, 32, 26, 0),
+(8, 2021, 38, 21, 0),
+(9, 2021, 18, 42, 0),
+(10, 2021, 30, 30, 0);
+
+
 SELECT * from player_contract;
 select * from player_contract INNER JOIN players ON player_contract.playerID = players.playerID NATURAL JOIN teams where city = "Dallas";
 
