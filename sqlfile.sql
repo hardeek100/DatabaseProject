@@ -302,6 +302,31 @@ INSERT into player_contract(amount, years, yearSigned) VALUES
 (442342353, 3, 2021),
 (4434533311, 3, 2019);
 
+
+-- Inserting to player_stats table
+INSERT into player_stats(playerID, season, Points, Rebounds, Assists)
+VALUES (1, 2021, 14.7, 3.7, 3.2),
+(2, 2021, 15.7, 14.7, 0.8),
+(3, 2021, null, null, null),
+(4, 2021, 1.3, 2.4, 0.3),
+(5, 2021, 5.0, 1.4, 1.9),
+(6, 2021, 4.7, 2.8, 1),
+(7, 2021, 5.6, 5.1, 2.1),
+(8, 2021, 3.6, 2.0, 0.2),
+(9, 2021, 1.6, 3.0, 0.2),
+(10, 2021, 3.7, 4, 1.3),
+(11, 2021, 24.5, 5.8, 3.4),
+(12, 2021, 4.8, 0.9, 0.4),
+(13, 2021, 2.7, 2.5, 0.1),
+(14, 2021, 18, 2.7, 3.5),
+(15, 2021, 2.9, 1.8, 0.6),
+(16, 2021, 2.2, 2.3, 0.7),
+(17, 2021, 3.4, 2.2, 0.4),
+(18, 2021, 4.8, 2.6, 0.7),
+(19, 2021, 7.4, 2.3, 1.8),
+(20, 2021, 13.6, 3.5, 5.5);
+
+
 SELECT * from player_contract;
 select * from player_contract INNER JOIN players ON player_contract.playerID = players.playerID NATURAL JOIN teams where city = "Dallas";
 
