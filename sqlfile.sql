@@ -1,69 +1,75 @@
+/*
+Spring 2021 TTU Concepts of Database System (CS-4354-001)
+Project 1
+Authors: Hardik Poudel, Reagan Schulte​, Bibek Pokharel​, Yathartha Regmi​
+
+This is a sql program created for the project 1 of class CS-4354-001 Spring 2021 to demonstrate the 
+relational database system.  
+*/
+
+
+-- creating the database
+
 DROP DATABASE IF EXISTS basketball_League;
 CREATE DATABASE IF NOT EXISTS basketball_League;
 USE basketball_League;
 
-    
 DROP table teams;
-DROP table team_record;
-DROP table players;
-DROP table player_stats;
-DROP table player_contract;
-
-
 CREATE TABLE teams
 (
-    teamID        INT    NOT NULL AUTO_INCREMENT,
+    teamID		INT    NOT NULL AUTO_INCREMENT,
     city        VARCHAR(25) NOT NULL,
     nickname    VARCHAR(25) NOT NULL,
     CONSTRAINT teamsPK PRIMARY KEY(teamID)
 );
+
+DROP table players;
 CREATE TABLE players
 (
-    playerID    INT NOT NULL AUTO_INCREMENT,
-    firstName    VARCHAR(25) NOT NULL,
+    playerID	INT NOT NULL AUTO_INCREMENT,
+    firstName	VARCHAR(25) NOT NULL,
     lastName    VARCHAR(25),
-    teamID 	INT NULL,
-    CONSTRAINT playersPK PRIMARY KEY(playerID),
-	CONSTRAINT playersFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
+    teamID 		INT NULL,
+    CONSTRAINT playersPK PRIMARY KEY(playerID)
+	-- CONSTRAINT playersFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
 );
 
+DROP table player_contract;
 CREATE TABLE player_contract
 (
-     playerID    INT NOT NULL AUTO_INCREMENT,
-    amount    float NOT NULL,
-    years    INT NOT NULL,
-    yearSigned    INT NOT NULL,
-    CONSTRAINT pcPK PRIMARY KEY(playerID),
-    -- CONSTRAINT pcPK PRIMARY KEY(playerID, amount, years),
-    	CONSTRAINT pcFK FOREIGN KEY(playerID) REFERENCES players(playerID)
+	playerID	INT NOT NULL AUTO_INCREMENT,
+    amount		float NOT NULL,
+    years		INT NOT NULL,
+    yearSigned	INT NOT NULL,
+    CONSTRAINT pcPK PRIMARY KEY(playerID)
+	-- CONSTRAINT pcFK FOREIGN KEY(playerID) REFERENCES players(playerID)
 );
+
+DROP table team_record;
 CREATE TABLE team_record
 (
-    teamID        INT NOT NULL,
-    season        INT NOT NULL,
+    teamID		INT NOT NULL,
+    season		INT NOT NULL,
     wins        INT NULL,
-    losses        INT NULL,
+    losses      INT NULL,
     ties        INT NULL,
-    CONSTRAINT trPK PRIMARY KEY(teamID, season),
-	CONSTRAINT trFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
+    CONSTRAINT trPK PRIMARY KEY(teamID, season)
+	-- CONSTRAINT trFK FOREIGN KEY(teamID) REFERENCES teams(teamID)
 );
+
+DROP table player_stats;
 CREATE TABLE player_stats
 (
-    playerID    INT NOT NULL,
-    season        INT NOT NULL,
-    Points        float NULL,
-    Rebounds    float NULL,
-    Assists        float NULL,
-    CONSTRAINT psPK PRIMARY KEY(playerID, season),
-	CONSTRAINT psFK FOREIGN KEY(playerID) REFERENCES players(playerID)
-    );
-    
-    
-SELECT * from teams;
-SELECT * from team_record;
-SELECT * from players;
-SELECT * from player_stats;
-SELECT * from player_contract;
+    playerID		INT NOT NULL,
+    season			INT NOT NULL,
+    Points			float NULL,
+    Rebounds		float NULL,
+    Assists			float NULL,
+    CONSTRAINT psPK PRIMARY KEY(playerID, season)
+	--  CONSTRAINT psFK FOREIGN KEY(playerID) REFERENCES players(playerID)
+);
+
+-- Inserting data to table Players
 
 INSERT INTO Players(firstName, lastName, teamID)
 VALUES
@@ -139,7 +145,6 @@ VALUES
 ('Collin','Sexton','6'),
 ('Lamar','Stevens','6'),
 
-
 /* Team Dallas Mavericks  */
 ('Tyler','Bey','7'),
 ('Jalen','Brunsen','7'),
@@ -190,6 +195,7 @@ VALUES
 ('Alen','Smailagic','10'),
 ('Klay','Thompson','10');
 
+
 -- Inserting to teams table
 INSERT into teams(city, nickname)
 VALUES('Atlanta', 'Hawks'),('Boston', 'Celtics'),
@@ -198,6 +204,27 @@ VALUES('Atlanta', 'Hawks'),('Boston', 'Celtics'),
         ('Dallas', 'Mavericks'),('Denver', 'Nuggets'),
         ('Detroit', 'Pistons'),('Golden State', 'Warriors');
 
+-- creating a new table players to demonstrate trigger
+
+DROP table players_account;
+create table players_account(
+	playerID    INT NOT NULL AUTO_INCREMENT,
+	tax 		float NULL,
+    age 		int NULL,
+	CONSTRAINT paPK PRIMARY KEY(playerID)
+	-- CONSTRAINT paFK FOREIGN KEY(playerID) REFERENCES players(playerID)
+);
+
+-- Triggering
+-- This trigger function playerInfo will add tax paid by the players and random age (for demo) whenever 
+-- data is inserted in the table player_contract
+
+drop trigger playerInfo;
+create trigger playerInfo 
+AFTER INSERT ON player_contract
+FOR EACH ROW
+INSERT INTO players_account(tax, age)
+	VALUES (new.amount * 37 /100 , FLOOR(RAND() * (45-18 + 1) + 18));
 
 -- Inserting to player_contract table
 INSERT into player_contract(amount, years, yearSigned) VALUES
@@ -302,29 +329,108 @@ INSERT into player_contract(amount, years, yearSigned) VALUES
 (442342353, 3, 2021),
 (4434533311, 3, 2019);
 
-
 -- Inserting to player_stats table
-INSERT into player_stats(playerID, season, Points, Rebounds, Assists)
-VALUES (1, 2021, 14.7, 3.7, 3.2),
-(2, 2021, 15.7, 14.7, 0.8),
-(3, 2021, null, null, null),
-(4, 2021, 1.3, 2.4, 0.3),
-(5, 2021, 5.0, 1.4, 1.9),
-(6, 2021, 4.7, 2.8, 1),
-(7, 2021, 5.6, 5.1, 2.1),
-(8, 2021, 3.6, 2.0, 0.2),
-(9, 2021, 1.6, 3.0, 0.2),
-(10, 2021, 3.7, 4, 1.3),
-(11, 2021, 24.5, 5.8, 3.4),
-(12, 2021, 4.8, 0.9, 0.4),
-(13, 2021, 2.7, 2.5, 0.1),
-(14, 2021, 18, 2.7, 3.5),
-(15, 2021, 2.9, 1.8, 0.6),
-(16, 2021, 2.2, 2.3, 0.7),
-(17, 2021, 3.4, 2.2, 0.4),
-(18, 2021, 4.8, 2.6, 0.7),
-(19, 2021, 7.4, 2.3, 1.8),
-(20, 2021, 13.6, 3.5, 5.5);
+INSERT into player_stats(playerID, season, Points, Rebounds, Assists) VALUES
+(1 , 2016 , 10.7 , 3.4 , 2.6),
+(2 , 2015 , 32.4 , 3.2 , 1.9),
+(3 , 2020 , 32.4 , 5.9 , 2.5),
+(4 , 2020 , 35.4 , 2.6 , 2.6),
+(5 , 2020 , 4.4 , 4.4 , 5.9),
+(6 , 2019 , 46.8 , 5.8 , 4.6),
+(7 , 2020 , 9.4 , 0.1 , 5.7),
+(8 , 2018 , 12.8 , 5.3 , 5.5),
+(9 , 2021 , 12.6 , 1.5 , 1.6),
+(10 , 2018 , 22.5 , 0.9 , 3.5),
+(11 , 2015 , 2.3 , 2.2 , 3.7),
+(12 , 2019 , 49.6 , 5.1 , 0.4),
+(13 , 2018 , 22.2 , 3.1 , 5.4),
+(14 , 2015 , 29.8 , 5.6 , 4.1),
+(15 , 2021 , 12.4 , 1.5 , 0.4),
+(16 , 2021 , 5.9 , 0.3 , 3.5),
+(17 , 2021 , 26.2 , 3.9 , 3.9),
+(18 , 2015 , 22.2 , 4.1 , 3.7),
+(19 , 2020 , 19.1 , 3.7 , 5.1),
+(20 , 2017 , 40.4 , 0.7 , 4.2),
+(21 , 2017 , 39.9 , 2.9 , 0.7),
+(22 , 2017 , 21.7 , 4.1 , 5.7),
+(23 , 2015 , 3.4 , 3.7 , 0.5),
+(24 , 2017 , 31.8 , 5.5 , 5.6),
+(25 , 2020 , 35.1 , 0.3 , 1.4),
+(26 , 2019 , 28.1 , 3.3 , 4.2),
+(27 , 2019 , 49.8 , 5.8 , 0.1),
+(28 , 2021 , 39.2 , 0.3 , 0.5),
+(29 , 2021 , 39.4 , 0.7 , 2.2),
+(30 , 2015 , 37.3 , 2.7 , 1.9),
+(31 , 2020 , 9.7 , 3.3 , 2.6),
+(32 , 2016 , 1.7 , 1.2 , 4.1),
+(33 , 2015 , 40.1 , 1.4 , 5.9),
+(34 , 2020 , 35.3 , 5.4 , 4.4),
+(35 , 2019 , 47.6 , 5.2 , 4.8),
+(36 , 2018 , 30.7 , 1.6 , 5.9),
+(37 , 2016 , 1.9 , 5.8 , 4.8),
+(38 , 2018 , 19.6 , 0.1 , 3.3),
+(39 , 2017 , 16.1 , 1.8 , 5.6),
+(40 , 2016 , 44.5 , 1.5 , 0.1),
+(41 , 2018 , 14.9 , 4.3 , 3.7),
+(42 , 2020 , 12.2 , 3.9 , 2.2),
+(43 , 2016 , 26.4 , 1.4 , 4.2),
+(44 , 2021 , 9.9 , 5.3 , 0.9),
+(45 , 2021 , 8.8 , 5.9 , 2.6),
+(46 , 2015 , 19.4 , 1.1 , 3.3),
+(47 , 2020 , 20.7 , 4.5 , 3.9),
+(48 , 2021 , 6.6 , 4.5 , 5.1),
+(49 , 2015 , 7.6 , 2.1 , 4.7),
+(50 , 2018 , 43.7 , 0.4 , 0.8),
+(51 , 2016 , 9.3 , 0.2 , 0.1),
+(52 , 2020 , 25.6 , 2.9 , 1.2),
+(53 , 2018 , 18.7 , 4.4 , 2.5),
+(54 , 2018 , 14.9 , 3.4 , 0.9),
+(55 , 2021 , 16.5 , 1.2 , 0.7),
+(56 , 2019 , 11.3 , 5.5 , 0.4),
+(57 , 2015 , 22.8 , 1.6 , 1.7),
+(58 , 2021 , 5.5 , 4.4 , 0.6),
+(59 , 2017 , 11.3 , 1.7 , 5.5),
+(60 , 2020 , 48.1 , 0.7 , 1.4),
+(61 , 2019 , 26.2 , 2.3 , 4.4),
+(62 , 2019 , 17.7 , 3.3 , 5.3),
+(63 , 2017 , 31.1 , 5.1 , 2.7),
+(64 , 2019 , 33.9 , 4.4 , 0.5),
+(65 , 2020 , 1.3 , 0.5 , 0.8),
+(66 , 2020 , 31.2 , 4.1 , 2.2),
+(67 , 2018 , 28.1 , 4.1 , 0.1),
+(68 , 2021 , 45.5 , 2.4 , 5.2),
+(69 , 2019 , 23.6 , 2.7 , 0.6),
+(70 , 2018 , 13.1 , 2.2 , 2.9),
+(71 , 2019 , 34.3 , 2.8 , 3.8),
+(72 , 2021 , 4.5 , 5.5 , 4.3),
+(73 , 2015 , 18.3 , 4.9 , 2.8),
+(74 , 2015 , 6.7 , 2.6 , 4.9),
+(75 , 2016 , 41.1 , 3.3 , 4.4),
+(76 , 2018 , 17.8 , 4.6 , 3.6),
+(77 , 2021 , 33.5 , 1.4 , 3.6),
+(78 , 2017 , 23.7 , 1.5 , 3.2),
+(79 , 2018 , 21.8 , 5.9 , 5.2),
+(80 , 2017 , 23.3 , 4.6 , 2.8),
+(81 , 2016 , 29.9 , 3.4 , 5.5),
+(82 , 2015 , 12.7 , 3.2 , 5.6),
+(83 , 2018 , 41.6 , 0.3 , 0.5),
+(84 , 2018 , 25.8 , 5.5 , 4.8),
+(85 , 2018 , 25.4 , 2.8 , 4.9),
+(86 , 2020 , 46.4 , 3.6 , 5.9),
+(87 , 2016 , 28.6 , 2.2 , 5.9),
+(88 , 2019 , 41.2 , 5.6 , 3.8),
+(89 , 2019 , 46.4 , 0.3 , 2.4),
+(90 , 2021 , 17.1 , 1.8 , 1.6),
+(91 , 2020 , 45.7 , 1.3 , 1.1),
+(92 , 2015 , 46.2 , 0.5 , 4.3),
+(93 , 2021 , 43.5 , 1.5 , 2.5),
+(94 , 2016 , 10.8 , 4.5 , 2.6),
+(95 , 2017 , 10.1 , 4.6 , 4.2),
+(96 , 2017 , 5.6 , 4.9 , 3.7),
+(97 , 2019 , 25.8 , 4.3 , 0.5),
+(98 , 2019 , 26.2 , 4.7 , 0.2),
+(99 , 2019 , 23.2 , 3.2 , 2.4),
+(100 , 2021 , 28.5 , 5.4 , 2.4);
 
 
 -- Inserting to team_record table
@@ -342,7 +448,5 @@ VALUES
 (10, 2021, 30, 30, 0);
 
 
-SELECT * from player_contract;
-select * from player_contract INNER JOIN players ON player_contract.playerID = players.playerID NATURAL JOIN teams where city = "Dallas";
-
+-- End of creating database.
 
