@@ -9,9 +9,10 @@ SELECT * from player_contract;
 SELECT * from players_account;
 
 -- Create view players_city to view players from Dallas city.
-DROP VIEW players_city;
-CREATE VIEW players_city as SELECT * from players NATURAL JOIN teams where city = "Dallas";
-SELECT * from players_city;
+DROP VIEW players_dallas;
+CREATE VIEW players_dallas as SELECT * from players NATURAL JOIN teams where city = "Dallas";
+SELECT firstName, lastName from players_dallas;
+SELECT * from players_dallas NATURAL JOIN player_stats;
 
 -- To view players for all cities
 select * from players INNER JOIN teams ON players.teamID = teams.teamID;
@@ -58,17 +59,12 @@ select * from teams NATURAL JOIN team_record order by wins DESC;
 -- To get the total tax paid by all players
 select sum(tax) from players_account;
 
--- Indexing table team_record ( Needs review )
+select playerID, amount, amount* 37/100, yearSigned, tax, age from player_contract NATURAL JOIN players_account;
+
+-- Indexing table team_record ( NA in our database)
 DROP INDEX team_index ON team_record; 
 CREATE INDEX team_index ON team_record(season);
 select * from team_record;
-
-select * from players where firstName = "Kris";
-INSERT into players (firstName, lastName, teamID) VALUES ("Kris", "Dunn", 4);
-
-
-select playerID, amount, amount* 37/100, yearSigned, tax, age from player_contract NATURAL JOIN players_account;
-select * from players_account;
 
 select * from player_contract INNER JOIN players ON player_contract.playerID = players.playerID NATURAL JOIN teams where city = "Dallas";
 
